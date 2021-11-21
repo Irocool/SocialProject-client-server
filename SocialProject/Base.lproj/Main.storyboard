@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7XN-Et-EAb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="H11-qy-3Nx">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -140,9 +140,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UeK-90-4su">
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UeK-90-4su">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -152,6 +151,12 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vJz-tB-QIH"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="UeK-90-4su" secondAttribute="bottom" id="3nG-LK-GGW"/>
+                            <constraint firstItem="UeK-90-4su" firstAttribute="trailing" secondItem="vJz-tB-QIH" secondAttribute="trailing" id="4we-iy-xYv"/>
+                            <constraint firstItem="UeK-90-4su" firstAttribute="leading" secondItem="vJz-tB-QIH" secondAttribute="leading" id="o17-rE-kB0"/>
+                            <constraint firstItem="UeK-90-4su" firstAttribute="top" secondItem="L91-yh-SKy" secondAttribute="top" id="zlb-vX-ryl"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="WebKitView" destination="UeK-90-4su" id="zBV-1d-7QW"/>
@@ -400,7 +405,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="ORO-tz-hUg">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="g5f-8v-JMX" customClass="TabBarController" customModule="SocialProject" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarController" automaticallyAdjustsScrollViewInsets="NO" id="g5f-8v-JMX" customClass="TabBarController" customModule="SocialProject" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="z4h-cX-Xf5"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="kA9-GB-8pG">
