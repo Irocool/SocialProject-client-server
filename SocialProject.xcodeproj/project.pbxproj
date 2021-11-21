@@ -26,6 +26,7 @@
 		595CF9CD25C7155200453C87 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 595CF9CB25C7155200453C87 /* LaunchScreen.storyboard */; };
 		595CFA0925C71B3500453C87 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595CFA0825C71B3500453C87 /* LoginFormViewController.swift */; };
 		596BF779271CB03E009224D2 /* CustomAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596BF778271CB03E009224D2 /* CustomAvatarView.swift */; };
+		597B41C7274AB0400006E5DB /* WebLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597B41C6274AB0400006E5DB /* WebLoginViewController.swift */; };
 		599140A1273416220032BAD7 /* PushAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599140A0273416220032BAD7 /* PushAnimation.swift */; };
 		599140A9273416D00032BAD7 /* PopAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599140A8273416D00032BAD7 /* PopAnimation.swift */; };
 		599140AE273418020032BAD7 /* CustomInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599140AD273418020032BAD7 /* CustomInteractiveTransition.swift */; };
@@ -81,6 +82,7 @@
 		595CF9DE25C7155300453C87 /* SocialProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SocialProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		595CFA0825C71B3500453C87 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
 		596BF778271CB03E009224D2 /* CustomAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAvatarView.swift; sourceTree = "<group>"; };
+		597B41C6274AB0400006E5DB /* WebLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebLoginViewController.swift; sourceTree = "<group>"; };
 		599140A0273416220032BAD7 /* PushAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAnimation.swift; sourceTree = "<group>"; };
 		599140A8273416D00032BAD7 /* PopAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopAnimation.swift; sourceTree = "<group>"; };
 		599140AD273418020032BAD7 /* CustomInteractiveTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInteractiveTransition.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				592F7AFF2671E4030003ED1D /* LoadingView.swift */,
 				591819F02673AADA0051079B /* TabBarController.swift */,
 				5959854F273852E400577B1B /* GradientView.swift */,
+				597B41C6274AB0400006E5DB /* WebLoginViewController.swift */,
 			);
 			path = SocialProject;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				599140AE273418020032BAD7 /* CustomInteractiveTransition.swift in Sources */,
+				597B41C7274AB0400006E5DB /* WebLoginViewController.swift in Sources */,
 				592F7AEE2671E28F0003ED1D /* User.swift in Sources */,
 				59479BF927162D73005F3836 /* AddGroupTableViewController.swift in Sources */,
 				599140A9273416D00032BAD7 /* PopAnimation.swift in Sources */,
