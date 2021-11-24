@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,6 +28,8 @@
 		595CFA0925C71B3500453C87 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595CFA0825C71B3500453C87 /* LoginFormViewController.swift */; };
 		596BF779271CB03E009224D2 /* CustomAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596BF778271CB03E009224D2 /* CustomAvatarView.swift */; };
 		597B41C7274AB0400006E5DB /* WebLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597B41C6274AB0400006E5DB /* WebLoginViewController.swift */; };
+		597B41D4274AC9D50006E5DB /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597B41D3274AC9D50006E5DB /* NetworkManager.swift */; };
+		597B41DC274ACA820006E5DB /* AlamofireSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597B41DB274ACA820006E5DB /* AlamofireSession.swift */; };
 		599140A1273416220032BAD7 /* PushAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599140A0273416220032BAD7 /* PushAnimation.swift */; };
 		599140A9273416D00032BAD7 /* PopAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599140A8273416D00032BAD7 /* PopAnimation.swift */; };
 		599140AE273418020032BAD7 /* CustomInteractiveTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 599140AD273418020032BAD7 /* CustomInteractiveTransition.swift */; };
@@ -90,6 +92,8 @@
 		595CFA0825C71B3500453C87 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
 		596BF778271CB03E009224D2 /* CustomAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAvatarView.swift; sourceTree = "<group>"; };
 		597B41C6274AB0400006E5DB /* WebLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebLoginViewController.swift; sourceTree = "<group>"; };
+		597B41D3274AC9D50006E5DB /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		597B41DB274ACA820006E5DB /* AlamofireSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlamofireSession.swift; sourceTree = "<group>"; };
 		599140A0273416220032BAD7 /* PushAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAnimation.swift; sourceTree = "<group>"; };
 		599140A8273416D00032BAD7 /* PopAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopAnimation.swift; sourceTree = "<group>"; };
 		599140AD273418020032BAD7 /* CustomInteractiveTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomInteractiveTransition.swift; sourceTree = "<group>"; };
@@ -157,7 +161,6 @@
 				9C20B09D9A44276E3D290C1A /* Pods-SocialProjectTests.debug.xcconfig */,
 				018BD54764293B23FD362A8B /* Pods-SocialProjectTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -220,6 +223,7 @@
 		595CF9BF25C7153700453C87 /* SocialProject */ = {
 			isa = PBXGroup;
 			children = (
+				597B41D2274AC9870006E5DB /* Network */,
 				5991409F2734137E0032BAD7 /* NavigationController */,
 				59CCAA62272ECDCF00B1394A /* News */,
 				59479BFE27162F1E005F3836 /* Group */,
@@ -238,6 +242,15 @@
 				597B41C6274AB0400006E5DB /* WebLoginViewController.swift */,
 			);
 			path = SocialProject;
+			sourceTree = "<group>";
+		};
+		597B41D2274AC9870006E5DB /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				597B41D3274AC9D50006E5DB /* NetworkManager.swift */,
+				597B41DB274ACA820006E5DB /* AlamofireSession.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 		5991409F2734137E0032BAD7 /* NavigationController */ = {
@@ -502,10 +515,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				597B41D4274AC9D50006E5DB /* NetworkManager.swift in Sources */,
 				599140AE273418020032BAD7 /* CustomInteractiveTransition.swift in Sources */,
 				597B41C7274AB0400006E5DB /* WebLoginViewController.swift in Sources */,
 				592F7AEE2671E28F0003ED1D /* User.swift in Sources */,
 				59479BF927162D73005F3836 /* AddGroupTableViewController.swift in Sources */,
+				597B41DC274ACA820006E5DB /* AlamofireSession.swift in Sources */,
 				599140A9273416D00032BAD7 /* PopAnimation.swift in Sources */,
 				59CCAA6F272EDFDD00B1394A /* NewsTableViewCell.swift in Sources */,
 				592F7B052671E48B0003ED1D /* Colors.swift in Sources */,
