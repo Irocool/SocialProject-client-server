@@ -1,13 +1,14 @@
 //
-//  FriendsCollectionViewController.swift
+//  GroupsCollectionCollectionViewController.swift
 //  SocialProject
 //
-//  Created by Irina Kuligina on 12.10.2021.
+//  Created by Irina Kuluigina on 28.11.2021.
 //
 
 import UIKit
 
-class FriendsCollectionViewController: UICollectionViewController {
+class GroupsCollectionViewController: UICollectionViewController {
+    
     private let reuseIdentifier = "PostCollectionViewCell"
     
     var posts: [Image] = []
@@ -15,12 +16,12 @@ class FriendsCollectionViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        collectionView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: "PostCollectionViewCell")
+
+        collectionView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
 
         view.backgroundColor = Colors.palePurplePantone
-
     }
+
     private func loadEveryImage(completion: @escaping () -> Void) {
         for post in posts {
             let imageData = NetworkManager.shared.loadImageFrom(url: post.photo200.url)
@@ -31,6 +32,7 @@ class FriendsCollectionViewController: UICollectionViewController {
         }
         completion()
     }
+
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -46,7 +48,7 @@ class FriendsCollectionViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PostCollectionViewCell
         
         cell.setValues(item: posts[indexPath.item])
-        cell.frame = CGRect(x: 10, y: 10, width: 100, height: 500)     
+    
         return cell
     }
     
@@ -55,11 +57,12 @@ class FriendsCollectionViewController: UICollectionViewController {
         
         
         loadEveryImage() { [weak self] in
-            guard self != nil else { return }
+            guard let self = self else { return }
+            
+            vc.getPhotosData(photos: self.loadedImages, currentIndex: indexPath.item)
+            
+            self.navigationController?.pushViewController(vc, animated: true)
         }
-        vc.getPhotosData(photos: self.loadedImages, currentIndex: indexPath.item)
-        
-        self.navigationController?.pushViewController(vc, animated: true)
     }
-    
+
 }

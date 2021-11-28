@@ -31,7 +31,9 @@ struct Post: PostModel {
     var text: String
     
     var likesCount: Int
+    var commentsCount: Int
     var viewsCount: Int
+    var repostsCount: Int
     
     mutating func changeLikeState() {
         if likeState == .dislike {
@@ -44,4 +46,14 @@ struct Post: PostModel {
     }
 }
 
-
+// Временно
+func getUpdatedPost(id: Int) -> Post? {
+//    for user in User.database {
+//        for post in user.posts {
+//            if post.id == id {
+//                return post
+//            }
+//        }
+//    }
+    return nil
+}

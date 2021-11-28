@@ -15,6 +15,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     var userData: [Character: [User]] = [:]    // Словарь для получения массива пользователей по букве секции
     var searchData: [Character: [User]] = [:]  // Такой же как и userData, только при использовании UISearchBar
     var searchSections: [Character] = []       // Такой же как и sections, используется при UISearchBar
+    var friendList: [User] = []
     
     private let reuseIdentifier = "CustomTableViewCell"
 
@@ -28,27 +29,43 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         view.backgroundColor = Colors.palePurplePantone
         tableView.sectionIndexBackgroundColor = Colors.palePurplePantone
         
-        getUserData()
-        resetSearchTableViewData()
+        loadFriendList()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        getUserData()
-        resetSearchTableViewData()
+//        getUserData()
+//        resetSearchTableViewData()
     }
     
-    func getUserData() {
+    private func loadFriendList() {
+        NetworkManager.shared.loadFriendList(count: 0, offset: 0) { [weak self] friendList in
+            DispatchQueue.main.async {
+                guard let self = self,
+                      let friendList = friendList else { return }
+                self.friendList = friendList.friends
+                self.reloadTableData()
+                
+            }
+        }
+    }
+    private func reloadTableData() {
+        getUserData()
+        resetSearchTableViewData()
+        self.tableView.reloadData()
+    }
+    
+    private func getUserData() {
         userData = [:]
         var sectionSet: Set<Character> = []
-        for user in User.database {
+        for user in friendList {
             if let letter = user.name.first {
                 sectionSet.insert(letter)
-                
+
                 if userData[letter] == nil {
                     userData[letter] = []
                 }
-                
+
                 userData[letter]?.append(user)
             }
         }
@@ -67,7 +84,8 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         return users.count
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection
+                                section: Int) -> String? {
         return String(searchSections[section])
     }
 
@@ -76,6 +94,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         
         let sectionLetter = searchSections[indexPath.section]
         let user = searchData[sectionLetter]![indexPath.row]
+        
         cell.setValues(item: user)
 
         return cell
@@ -84,26 +103,34 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75.0
     }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //if #available(iOS 13.0, *) {
-            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "FriendsCollectionViewController") as! FriendsCollectionViewController
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "FriendsCollectionViewController") as! FriendsCollectionViewController
         
         let sectionLetter = searchSections[indexPath.section]
         let user = searchData[sectionLetter]![indexPath.row]
-        vc.posts = user.posts
-        vc.title = user.name
-        self.navigationController?.pushViewController(vc, animated: true)
+        
+        NetworkManager.shared.getPhotos(ownerID: String(user.id), count: 30, offset: 0, type: .profile) { [weak self]
+            imageList in
+            DispatchQueue.main.async {
+                guard let self = self,
+                      let imageList = imageList else { return }
+                vc.posts = imageList.images
+                vc.title = user.name
+ 
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
     }
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         return searchSections.map { String($0) }
     }
+    
     // MARK: - Custom Section View
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let viewHeight: CGFloat = 55
+        let viewHeight: CGFloat = 40
         let viewFrame: CGRect = CGRect(x: 0, y: 0, width: tableView.frame.width, height: viewHeight)
         let view = UIView(frame: viewFrame)
         
@@ -119,7 +146,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         
         return view
     }
-
+    
     // MARK: Cell animation
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -133,6 +160,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
             cell.alpha = 1.0
         }
     }
+    
     // MARK: - SearchBar setup
     
     func resetSearchTableViewData() {
@@ -144,13 +172,13 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         searchData = [:]
         searchSections = []
         var sectionSearchSet: Set<Character> = []
-        
+
         if searchText.isEmpty {
             resetSearchTableViewData()
         } else {
             for section in sections {
                 let userArray = userData[section] ?? []
-                
+
                 for user in userArray {
                     if user.name.lowercased().contains(searchText.lowercased()) {
                         if searchData[section] == nil {
@@ -161,9 +189,10 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
                     }
                 }
             }
-            
+
             searchSections = Array(sectionSearchSet).sorted()
          }
 
         self.tableView.reloadData()
-    }}
+    }
+}

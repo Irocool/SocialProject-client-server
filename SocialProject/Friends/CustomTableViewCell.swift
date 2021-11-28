@@ -20,7 +20,7 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func setValues(item: CellModel) {
-        avatarView.setImage(item.image)
+        //avatarView.setImage()
         nameLabel.text = item.name
     }
     
