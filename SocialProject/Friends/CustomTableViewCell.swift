@@ -19,13 +19,26 @@ class CustomTableViewCell: UITableViewCell {
         setupAvatarView()
     }
     
+    private func setDefaultImage() {
+        if let image = UIImage(named: "default-profile") {
+            avatarView.setImage(image)
+        }
+    }
+        
     func setValues(item: CellModel) {
-        //avatarView.setImage()
+        if let photo = item.photo {
+            let imageData = NetworkManager.shared.loadImageFrom(url: photo.photo_100)
+            
+            if let imageData = imageData,
+               let image = UIImage(data: imageData) {
+                avatarView.setImage(image)
+            } else { setDefaultImage() }
+        }  else { setDefaultImage() }
+        
         nameLabel.text = item.name
     }
-    
     func setupAvatarView() {
-       let tap = UITapGestureRecognizer(target: self, action: #selector(self.avatarViewTapped(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.avatarViewTapped(_:)))
         avatarView.addGestureRecognizer(tap)
     }
     

@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_SocialProjectTestsVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_SocialProjectTestsVersionString[];
+FOUNDATION_EXPORT double RealmSwiftVersionNumber;
+FOUNDATION_EXPORT const unsigned char RealmSwiftVersionString[];
 
