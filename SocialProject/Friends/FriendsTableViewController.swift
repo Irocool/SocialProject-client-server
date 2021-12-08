@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
 
@@ -15,7 +16,9 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
     var userData: [Character: [User]] = [:]    // Словарь для получения массива пользователей по букве секции
     var searchData: [Character: [User]] = [:]  // Такой же как и userData, только при использовании UISearchBar
     var searchSections: [Character] = []       // Такой же как и sections, используется при UISearchBar
-    var friendList: [User] = []
+    //var friendList: [User] = []
+    var friendsData: Results<User>!
+    var friendToken: NotificationToken?
     
     private let reuseIdentifier = "CustomTableViewCell"
 
@@ -29,7 +32,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
         view.backgroundColor = Colors.palePurplePantone
         tableView.sectionIndexBackgroundColor = Colors.palePurplePantone
         
-        checkFriendListData()
+        getUserData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,41 +40,50 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
 //        getUserData()
 //        resetSearchTableViewData()
     }
-    private func checkFriendListData() {
-        let friends = DatabaseManager.shared.loadUserData()
+    private func getUserData() {
+        self.friendsData = DatabaseManager.shared.loadUserData()
         
-        guard friends.isEmpty else {
-            print("[Database]: Loading friend list..")
-            friendList = friends
-            reloadTableData()
-            return
-        }
+        resetTableData()
+        
+        self.friendToken = friendsData?.observe(on: DispatchQueue.main, { [weak self] (changes) in
+            guard let self = self else { return }
+            
+            switch changes {
+            case .update:
+                self.tableView.reloadData()
+                break
+            case .initial:
+                self.tableView.reloadData()
+            case .error(let error):
+                print("Error in \(#function). Message: \(error.localizedDescription)")
+            }
+        })
         
         loadFriendList()
     }
     
     private func loadFriendList() {
         print("[Network]: Loading friend list..")
-        NetworkManager.shared.loadFriendList(count: 0, offset: 0) { [weak self] friendList in
+        NetworkManager.shared.loadFriendList(count: 0, offset: 0) { friendList in
             DispatchQueue.main.async {
-                guard let self = self,
-                      let friendList = friendList else { return }
-                self.friendList = friendList.friends
+                guard let friendList = friendList else { return }
+                //self.friendList = friendList.friends
+                DatabaseManager.shared.deleteUserData() // Removing all user data before loading new data from network
                 DatabaseManager.shared.saveUserData(groups: friendList.friends) // Saving data from network to Realm
-                self.reloadTableData()
+                //self.reloadTableData()
             }
         }
     }
-    private func reloadTableData() {
-        getUserData()
+    private func resetTableData() {
+        updateUserData()
         resetSearchTableViewData()
         self.tableView.reloadData()
     }
     
-    private func getUserData() {
+    private func updateUserData() {
         userData = [:]
         var sectionSet: Set<Character> = []
-        for user in friendList {
+        for user in friendsData {
             if let letter = user.name.first {
                 sectionSet.insert(letter)
 

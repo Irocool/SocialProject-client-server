@@ -28,11 +28,29 @@ class DatabaseManager {
     
     // MARK: - Loading data
     
-    func loadGroupData() -> [Group] {
-        return Array(realm.objects(Group.self))
+    func loadGroupData() -> Results<Group> {
+        return realm.objects(Group.self).sorted(byKeyPath: "orderNumber")
     }
     
-    func loadUserData() -> [User] {
-        return Array(realm.objects(User.self))
+    func loadUserData() -> Results<User> {
+        return realm.objects(User.self)
     }
+    
+    // MARK: - Remove all data
+    
+    func deleteGroupData() {
+        let result = realm.objects(Group.self)
+        try? realm.write {
+            realm.delete(result)
+        }
+    }
+    
+    func deleteUserData() {
+        let result = realm.objects(User.self)
+        try? realm.write {
+            realm.delete(result)
+        }
+    }
+    
 }
+
