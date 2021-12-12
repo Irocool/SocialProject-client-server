@@ -29,7 +29,7 @@ class DatabaseManager {
     // MARK: - Loading data
     
     func loadGroupData() -> Results<Group> {
-        return realm.objects(Group.self).sorted(byKeyPath: "orderNumber")
+        return realm.objects(Group.self)
     }
     
     func loadUserData() -> Results<User> {

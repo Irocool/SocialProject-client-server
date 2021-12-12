@@ -70,7 +70,7 @@ class FriendsTableViewController: UITableViewController, UISearchBarDelegate {
                 //self.friendList = friendList.friends
                 DatabaseManager.shared.deleteUserData() // Removing all user data before loading new data from network
                 DatabaseManager.shared.saveUserData(groups: friendList.friends) // Saving data from network to Realm
-                //self.reloadTableData()
+                self.resetTableData()
             }
         }
     }
