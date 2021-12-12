@@ -27,7 +27,7 @@ class NetworkManager {
         case photos = "photos.getAll"
         case groups = "groups.get"
         case searchGroups = "groups.search"
-    }
+        case getCurrentUserProfile = "account.getProfileInfo"    }
     
     @discardableResult
     func loadFriendList(count: Int, offset: Int, completion: @escaping (FriendList?) -> Void) -> Request? {
@@ -148,7 +148,30 @@ class NetworkManager {
             completion(groupList)
         }
     }
-    
+    @discardableResult
+    func loadCurrentProfile(completion: @escaping (CurrentUser) -> Void) -> Request? {
+        guard let token = UserSession.instance.token else { return nil }
+        
+        let path = Paths.getCurrentUserProfile.rawValue
+        
+        let parameters: Parameters = [
+            "access_token": token,
+            "v": versionVKAPI
+        ]
+        
+        let url = baseURL + path
+        
+        return Session.custom.request(url, parameters: parameters).responseData { response in
+            guard let data = response.value,
+                  let currentUser = try? JSONDecoder().decode(CurrentUser.self, from: data)
+            else {
+                print("Failed to parse group JSON!")
+                return
+            }
+            
+            completion(currentUser)
+        }
+    }
     func loadImageFrom(url: String) -> Data? {
         guard let url = URL(string: url) else { return nil }
         

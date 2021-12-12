@@ -7,6 +7,7 @@
 
 import UIKit
 import WebKit
+import FirebaseFirestore
 
 class WebLoginViewController: UIViewController, WKNavigationDelegate{
 
@@ -88,14 +89,28 @@ class WebLoginViewController: UIViewController, WKNavigationDelegate{
         } else {
             // TODO: - Do something if didn't get token
         }
-    
+        
+    }
+        
+    private func loadCurrentUser() {
+            NetworkManager.shared.loadCurrentProfile { [weak self] (currentUserProfile) in
+                guard let self = self else { return }
+                self.saveCurrentUserToFirestore(currentUserProfile)
+            }
+        }
+        
+    private func saveCurrentUserToFirestore(_ user: CurrentUser) {
+            let db = Firestore.firestore()
+            
+            db.collection("users").document("\(user.id)").setData(user.toFirestore(), merge: true)
+        }
     
     // MARK: - Move to TabBarController after success authorization
-     func moveToTabBarController() {
+    func moveToTabBarController() {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "TabBarController") as! TabBarController
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
      }
     
 }
-}
+
