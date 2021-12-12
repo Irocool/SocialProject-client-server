@@ -7,14 +7,6 @@ target 'SocialProject' do
 
   # Pods for SocialProject
   pod 'Alamofire', '~> 5.4'
-
-  target 'SocialProjectTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'SocialProjectUITests' do
-    # Pods for testing
-  end
+  pod 'RealmSwift', '~> 10.1'
 
 end

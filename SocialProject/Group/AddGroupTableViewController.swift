@@ -2,22 +2,21 @@
 //  AddGroupTableViewController.swift
 //  SocialProject
 //
-//  Created by Пользователь on 12.10.2021.
+//  Created by Irina Kuligina on 12.10.2021.
 //
 
 import UIKit
 
-class AddGroupTableViewController: UITableViewController {
+class AddGroupTableViewController: UITableViewController, UISearchBarDelegate {
 
-    var groups: [Group] {
-        get {
-            return Group.database.filter { $0.isAdded == false }
-        }
-    }
-
+    @IBOutlet weak var searchBar: UISearchBar!
+    var groups: [Group] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        searchBar.delegate = self
+        
         tableView.register(UINib(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
         
         view.backgroundColor = Colors.palePurplePantone
@@ -46,10 +45,33 @@ class AddGroupTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let id = groups[indexPath.row].id
-        Group.changeGroupAdded(by: id)
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "GroupsCollectionViewController") as! GroupsCollectionViewController
         
-        self.navigationController?.popViewController(animated: true)
-    }
+        let group = groups[indexPath.row]
+        
+        NetworkManager.shared.getPhotos(ownerID: "-\(group.id)", count: 30, offset: 0, type: .wall) { [weak self] imageList in
+            DispatchQueue.main.async {
+                guard let self = self,
+                      let imageList = imageList else { return }
 
+                vc.posts = imageList.images
+                vc.title = group.name
+                
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+    }
+    
+    // MARK: - SearchBar setup
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        NetworkManager.shared.getGroupsBy(searchRequest: searchText, count: 25, offset: 0) { [weak self] groupsList in
+            DispatchQueue.main.async {
+                guard let self = self,
+                      let groupsList = groupsList else { return }
+                self.groups = groupsList.groups
+                self.tableView.reloadData()
+            }
+        }
+    }
 }

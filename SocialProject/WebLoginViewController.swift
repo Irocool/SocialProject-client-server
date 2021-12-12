@@ -15,7 +15,7 @@ class WebLoginViewController: UIViewController, WKNavigationDelegate{
             webKitView.navigationDelegate = self
         }
     }
-    //https://oauth.vk.com/blank.html#access_token=1ccafc2ebc953cef0a327ac45b1676715b2012d1eee2dd2f25e66a9b85d1dbc0818fe9b115632450dd047&expires_in=86400&user_id=318890740
+  
     private let appID = "8006756"
     private let versionAPI = "5.131"
     private let scope = "336902"
@@ -91,11 +91,11 @@ class WebLoginViewController: UIViewController, WKNavigationDelegate{
     
     
     // MARK: - Move to TabBarController after success authorization
-     //func moveToTabBarController() {
-     //   let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "TabBarController") as! TabBarController
-      //  vc.modalPresentationStyle = .fullScreen
-      //  present(vc, animated: true, completion: nil)
-    //}
+     func moveToTabBarController() {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "TabBarController") as! TabBarController
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true, completion: nil)
+     }
     
 }
 }

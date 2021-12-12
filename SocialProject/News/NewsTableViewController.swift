@@ -20,18 +20,18 @@ class NewsTableViewController: UITableViewController {
   
         tableView.rowHeight = 450
         
-        getNews()
+      //  getNews()
     }
     
-    private func getNews() {
-        var news: [PostModel] = []
-        for user in User.database {
-            if user.isAdded {
-                news += user.posts
-            }
-        }
-        newsArray = news
-    }
+  //  private func getNews() {
+  //      var news: [PostModel] = []
+  //      for user in User.database {
+ //           if user.isAdded {
+  //              news += user.posts
+  //          }
+ //       }
+ //       newsArray = news
+ //   }
 
     // MARK: - Table view data source
 
@@ -46,7 +46,7 @@ class NewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! NewsTableViewCell
 
-        cell.setValues(item: newsArray[indexPath.item])
+     //   cell.setValues(item: newsArray[indexPath.item])
 
         return cell
     }

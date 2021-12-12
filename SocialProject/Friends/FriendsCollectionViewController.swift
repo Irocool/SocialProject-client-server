@@ -10,7 +10,8 @@ import UIKit
 class FriendsCollectionViewController: UICollectionViewController {
     private let reuseIdentifier = "PostCollectionViewCell"
     
-    var posts: [Post] = []
+    var posts: [Image] = []
+    var loadedImages: [UIImage] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +21,16 @@ class FriendsCollectionViewController: UICollectionViewController {
         view.backgroundColor = Colors.palePurplePantone
 
     }
-
+    private func loadEveryImage(completion: @escaping () -> Void) {
+        for post in posts {
+            let imageData = NetworkManager.shared.loadImageFrom(url: post.photo200.url)
+            if let imageData = imageData,
+               let image = UIImage(data: imageData) {
+                loadedImages.append(image)
+            }
+        }
+        completion()
+    }
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -43,12 +53,11 @@ class FriendsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "PhotoViewerViewController") as! PhotoViewerViewController
         
-        var photosArray: [UIImage] = []
         
-        posts.forEach { (post) in
-            photosArray.append(post.image)
+        loadEveryImage() { [weak self] in
+            guard self != nil else { return }
         }
-        vc.getPhotosData(photos: photosArray, currentIndex: indexPath.item)
+        vc.getPhotosData(photos: self.loadedImages, currentIndex: indexPath.item)
         
         self.navigationController?.pushViewController(vc, animated: true)
     }
