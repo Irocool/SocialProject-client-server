@@ -41,35 +41,24 @@ class PostCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    private func setDefaultImage() {
+        if let image = UIImage(named: "default-profile") {
+            imageView.image = image
+        }
+    }
+    
     func setValues(item: Image) {
         post = item
         
-        let imageData = NetworkManager.shared.loadImageFrom(url: item.photo200.url)
-        if let imageData = imageData,
-           let image = UIImage(data: imageData) {
-            imageView.image = image
-        } else {
-            if let image = UIImage(named: "default-profile") {
-                imageView.image = (image)
-            }
+        guard let image = item.photo200 else {
+            setDefaultImage()
+            return
         }
+        
+        imageView.kf.setImage(with: URL(string: image.url))
+        
         setupLikeButton()
     }
-    
-  //  private func changeLikeState() {
-  //      guard let post = post else { return }
-  //
- //       let userId = post.ownerId
- //       let postId = post.id
-        //
-//        for i in 0..<User.database[userId].posts.count {
-//            if postId == User.database[userId].posts[i].id {
-//                User.database[userId].posts[i].changeLikeState()
-//            }
-//        }
-        
-//        self.post?.changeLikeState()
-//    }
     
     @IBAction func likeButtonPressed(_ sender: UIButton) {
         guard let post = self.post else { return }

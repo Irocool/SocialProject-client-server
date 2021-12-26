@@ -16,9 +16,12 @@ class NewsTableViewCell: UITableViewCell {
     @IBOutlet weak var postImageView: UIImageView!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var eye: UIButton!
-    @IBOutlet weak var viewCountLabel: UILabel!
+    //@IBOutlet weak var viewsCountLabel: UILabel!
     
-    private var post: Post?
+    @IBOutlet weak var viewCountLabel: UILabel!
+    @IBOutlet weak var commentButton: UIButton!
+    @IBOutlet weak var repostButton: UIButton!
+    private var post: News?
     
     private let likeImage = UIImage(systemName: "heart.fill")!
     private let dislikeImage = UIImage(systemName: "heart")!
@@ -33,11 +36,13 @@ class NewsTableViewCell: UITableViewCell {
 
     private func setupView() {
         self.contentView.backgroundColor = Colors.palePurplePantone
-      setupAvatarImageView()
+        setupAvatarImageView()
         setupNameLabel()
         setupDateLabel()
         setupTextLabel()
-        postImageView.contentMode = .scaleAspectFill
+        setupPostImageView()
+        
+        //postImageView.contentMode = .scaleAspectFill
     }
     
     private func setupAvatarImageView() {
@@ -55,13 +60,18 @@ class NewsTableViewCell: UITableViewCell {
         postDateLabel.font = .systemFont(ofSize: 12, weight: .light)
     }
     
+    private func setupPostImageView() {
+        postImageView.contentMode = .scaleAspectFit
+    }
+
     private func setupTextLabel() {
         postTextLabel.textAlignment = .justified
         postTextLabel.textColor = Colors.oxfordBlue
         postTextLabel.font = .systemFont(ofSize: 15)
     }
     
-    private func getStringFromDate(_ date: Date) -> String {
+    private func getStringFromDate(_ unixTimestamp: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(unixTimestamp))
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
         
@@ -73,62 +83,79 @@ class NewsTableViewCell: UITableViewCell {
     private func changeLikeButtonImage() {
         guard let post = post else { return }
         
-        if post.likeState == .dislike {
+        if post.isUserLikes {
             likeButton.setImage(dislikeImage, for: .normal)
+            self.post?.likesCount -= 1
         } else {
             likeButton.setImage(likeImage, for: .normal)
+            self.post?.likesCount += 1
         }
+        
+        self.post?.isUserLikes = !post.isUserLikes
+        let likesCount = String(self.post?.likesCount ?? 0)
+        self.likeButton.setTitle(likesCount, for: .normal)
+    }
+    func setPostImage(url: String) {
+        guard let url = URL(string: url) else {
+            postImageView.isHidden = true
+            return
+        }
+        postImageView.isHidden = false
+        postImageView.kf.setImage(with: url)
     }
     
-  //  func setValues(item: PostModel) {
-  //      guard let user = User.getUser(by: item.ownerId) else { return }
-  //
- //       post = item as? Post
- //
- //       guard let post = post else { return }
-//
- //       avatarImageView.image = user.image
- //       nameLabel.text = user.name
- //
-//        postDateLabel.text = getStringFromDate(post.date)
-//        postTextLabel.text = post.text
-//        postImageView.image = post.image
+    func setValues(item: News, group: Group) {
+        self.post = item
         
-//        likeButton.setTitle(String(post.likesCount), for: .normal)
-//        changeLikeButtonImage()
-//    }
+        if let photo = group.photo,
+           let url = URL(string: photo.photo_100) {
+            avatarImageView.kf.setImage(with: url)
+        }
+        
+        nameLabel.text = group.name
+        
+        postDateLabel.text = getStringFromDate(item.date)
+        
+        postTextLabel.text = item.text
+        postTextLabel.sizeToFit()
+        setPostImage(url: item.photoURL)
+        
+        likeButton.setTitle(String(item.likesCount), for: .normal)
+        repostButton.setTitle(String(item.repostCount), for: .normal)
+        commentButton.setTitle(String(item.commentCount), for: .normal)
+        
+        viewCountLabel.text = String(item.viewsCount)
+        
+        setLikeButtonState(isUserLikes: item.isUserLikes)
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
-//    private func changeLikeState() {
-//        guard let post = post else { return }
-//
-//        let userId = post.ownerId
-//        let postId = post.id
-//
-//        for i in 0..<User.database[userId].posts.count {
-//            if postId == User.database[userId].posts[i].id {
-//                User.database[userId].posts[i].changeLikeState()
-//            }
-//        }
-//        self.post?.changeLikeState()
-//    }
-    
-    @IBAction func likeButtonPressed(_ sender: Any) {
-        guard let post = self.post else { return }
-        
-        if post.likeState == .dislike {
-            likeButton.setImage(likeImage, for: .normal)
-          //  changeLikeState()
-        } else {
-            likeButton.setImage(dislikeImage, for: .normal)
-          //  changeLikeState()
-        }
-        
-//        if let newPost = getUpdatedPost(id: post.id) {
-//            self.post = newPost
-           // setNewLikeValueWithAnimation(post: newPost)
-       // }
-    }}
+private func setLikeButtonState(isUserLikes: Bool) {
+    if isUserLikes {
+        likeButton.setImage(likeImage, for: .normal)
+    } else {
+        likeButton.setImage(dislikeImage, for: .normal)
+    }
+}
+
+private func setNewLikeValueWithAnimation(post: News) {
+    UIView.transition(with: likeButton, duration: 0.8, options: [.curveEaseOut, .transitionCurlUp]) {
+        self.likeButton.setTitle(String(post.likesCount), for: .normal)
+    } completion: { (state) in }
+}
+
+@IBAction func likeButtonPressed(_ sender: UIButton) {
+    changeLikeButtonImage()
+}
+
+@IBAction func commentButtonPressed(_ sender: UIButton) {
+    print(#function)
+}
+
+@IBAction func repostButtonPressed(_ sender: UIButton) {
+    print(#function)
+}
+}

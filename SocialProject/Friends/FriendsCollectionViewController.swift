@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import RealmSwift
 
 class FriendsCollectionViewController: UICollectionViewController {
     private let reuseIdentifier = "PostCollectionViewCell"
     
-    var posts: [Image] = []
-    var loadedImages: [UIImage] = []
+    var posts: Results<Image>!
+    var token: NotificationToken?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,15 +22,41 @@ class FriendsCollectionViewController: UICollectionViewController {
         view.backgroundColor = Colors.palePurplePantone
 
     }
-    private func loadEveryImage(completion: @escaping () -> Void) {
-        for post in posts {
-            let imageData = NetworkManager.shared.loadImageFrom(url: post.photo200.url)
-            if let imageData = imageData,
-               let image = UIImage(data: imageData) {
-                loadedImages.append(image)
+    private func loadImages(user: User, network: @escaping (ImageList?) -> Void) {
+        NetworkManager.shared.getPhotos(ownerID: String(user.id), count: 30, offset: 0, type: .profile) { imageList in
+            DispatchQueue.main.async {
+                guard let imageList = imageList else { return }
+                
+                DatabaseManager.shared.saveImageData(images: imageList.images)
+                
+                network(imageList)
+            }
+        } //failure: {  }
+    }
+    
+    func getImages(user: User) {
+        self.posts = DatabaseManager.shared.loadImageDataBy(ownerID: user.id)
+        self.token = posts.observe(on: DispatchQueue.main, { [weak self] (changes) in
+            guard let self = self else { return }
+            
+            switch changes {
+            case .update:
+                self.collectionView.reloadData()
+                break
+            case .initial:
+                self.collectionView.reloadData()
+            case .error(let error):
+                print("Error in \(#function). Message: \(error.localizedDescription)")
+            }
+        })
+        
+        loadImages(user: user) { (imageList) in
+            DispatchQueue.main.async {
+                if let imageList = imageList {
+                    DatabaseManager.shared.saveImageData(images: imageList.images)
+                }
             }
         }
-        completion()
     }
     // MARK: UICollectionViewDataSource
 
@@ -53,11 +80,9 @@ class FriendsCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "PhotoViewerViewController") as! PhotoViewerViewController
         
+        let images: [Image] = posts.map { $0 }
         
-        loadEveryImage() { [weak self] in
-            guard self != nil else { return }
-        }
-        vc.getPhotosData(photos: self.loadedImages, currentIndex: indexPath.item)
+        vc.getPhotosData(photos: images, currentIndex: indexPath.item)
         
         self.navigationController?.pushViewController(vc, animated: true)
     }

@@ -5,7 +5,6 @@
 //  Created by Irina Kuligina on 21.11.2021.
 //
 
-import Foundation
 import Alamofire
 
 enum PhotoAlbum: String {
@@ -27,6 +26,9 @@ class NetworkManager {
         case photos = "photos.getAll"
         case groups = "groups.get"
         case searchGroups = "groups.search"
+        case getCurrentUserProfile = "account.getProfileInfo"
+        case getFeed = "newsfeed.get"
+        
     }
     
     @discardableResult
@@ -74,7 +76,8 @@ class NetworkManager {
             "count": count,
             "offset": offset,
             "extended": true,
-            "album_id": type.rawValue
+            "album_id": type.rawValue,
+            "rev": true
         ]
 
         let url = baseURL + path
@@ -148,11 +151,61 @@ class NetworkManager {
             completion(groupList)
         }
     }
-    
+    @discardableResult
+    func loadCurrentProfile(completion: @escaping (CurrentUser) -> Void) -> Request? {
+        guard let token = UserSession.instance.token else { return nil }
+        
+        let path = Paths.getCurrentUserProfile.rawValue
+        
+        let parameters: Parameters = [
+            "access_token": token,
+            "v": versionVKAPI
+        ]
+        
+        let url = baseURL + path
+        
+        return Session.custom.request(url, parameters: parameters).responseData { response in
+            guard let data = response.value,
+                  let currentUser = try? JSONDecoder().decode(CurrentUser.self, from: data)
+            else {
+                print("Failed to parse group JSON!")
+                return
+            }
+            
+            completion(currentUser)
+        }
+    }
     func loadImageFrom(url: String) -> Data? {
         guard let url = URL(string: url) else { return nil }
         
         let data = try? Data(contentsOf: url)
         return data
+    }
+    
+    @discardableResult
+    func loadFeed(count: Int, completion: @escaping (Feed) -> Void) -> Request? {
+        guard let token = UserSession.instance.token else { return nil }
+    
+        let path = Paths.getFeed.rawValue
+    
+        let parameters: Parameters = [
+            "count": count,
+            "filters": "post,photo",
+            "access_token": token,
+            "v": versionVKAPI
+        ]
+    
+        let url = baseURL + path
+    
+        return Session.custom.request(url, parameters: parameters).responseData { (response) in
+            guard let data = response.value,
+                  let feed = try? JSONDecoder().decode(Feed.self, from: data)
+            else {
+                print("Failed to parse feed JSON!")
+            return
+            }
+        
+        completion(feed)
+        }
     }
 }
