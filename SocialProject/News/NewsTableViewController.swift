@@ -69,12 +69,14 @@ class NewsTableViewController: UITableViewController {
                 break;
             }
         }
+        //if newsPost.text == nil {cell.viewPostTextLabel.isHidden = true}
+        //if cell.postImageView == nil {cell.postImageView.isHidden = true}
         
         cell.setValues(item: newsPost, group: groupToSet)
 
         return cell
     }
-    
+
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         // Before animation
         cell.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
@@ -87,3 +89,4 @@ class NewsTableViewController: UITableViewController {
         }
     }
 }
+

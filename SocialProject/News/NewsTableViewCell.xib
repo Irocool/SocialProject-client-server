@@ -71,7 +71,7 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xk0-oN-ars">
+                    <view contentMode="scaleToFill" restorationIdentifier="viewTextPostLabel" translatesAutoresizingMaskIntoConstraints="NO" id="Xk0-oN-ars">
                         <rect key="frame" x="15" y="98" width="298" height="67"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wNC-T2-Dht">
@@ -180,6 +180,7 @@
                 <outlet property="postTextLabel" destination="HbF-Sq-nU5" id="bNs-Y5-c8f"/>
                 <outlet property="repostButton" destination="5UW-Fb-W5b" id="tHy-5n-z7H"/>
                 <outlet property="viewCountLabel" destination="nS6-gx-I96" id="huJ-Fr-x86"/>
+                <outlet property="viewPostTextLabel" destination="Xk0-oN-ars" id="ADj-65-pLa"/>
             </connections>
             <point key="canvasLocation" x="360.86956521739131" y="120.53571428571428"/>
         </tableViewCell>
