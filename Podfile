@@ -8,5 +8,8 @@ target 'SocialProject' do
   # Pods for SocialProject
   pod 'Alamofire', '~> 5.4'
   pod 'RealmSwift', '~> 10.1'
+  pod 'Kingfisher', '~> 5.15'
+  pod 'Firebase/Database'
+  pod 'Firebase/Firestore'
 
 end

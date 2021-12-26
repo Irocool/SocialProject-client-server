@@ -5,7 +5,6 @@
 //  Created by Irina Kuligina on 21.11.2021.
 //
 
-import Foundation
 import Alamofire
 
 enum PhotoAlbum: String {
@@ -27,7 +26,10 @@ class NetworkManager {
         case photos = "photos.getAll"
         case groups = "groups.get"
         case searchGroups = "groups.search"
-        case getCurrentUserProfile = "account.getProfileInfo"    }
+        case getCurrentUserProfile = "account.getProfileInfo"
+        case getFeed = "newsfeed.get"
+        
+    }
     
     @discardableResult
     func loadFriendList(count: Int, offset: Int, completion: @escaping (FriendList?) -> Void) -> Request? {
@@ -74,7 +76,8 @@ class NetworkManager {
             "count": count,
             "offset": offset,
             "extended": true,
-            "album_id": type.rawValue
+            "album_id": type.rawValue,
+            "rev": true
         ]
 
         let url = baseURL + path
@@ -177,5 +180,32 @@ class NetworkManager {
         
         let data = try? Data(contentsOf: url)
         return data
+    }
+    
+    @discardableResult
+    func loadFeed(count: Int, completion: @escaping (Feed) -> Void) -> Request? {
+        guard let token = UserSession.instance.token else { return nil }
+    
+        let path = Paths.getFeed.rawValue
+    
+        let parameters: Parameters = [
+            "count": count,
+            "filters": "post,photo",
+            "access_token": token,
+            "v": versionVKAPI
+        ]
+    
+        let url = baseURL + path
+    
+        return Session.custom.request(url, parameters: parameters).responseData { (response) in
+            guard let data = response.value,
+                  let feed = try? JSONDecoder().decode(Feed.self, from: data)
+            else {
+                print("Failed to parse feed JSON!")
+            return
+            }
+        
+        completion(feed)
+        }
     }
 }

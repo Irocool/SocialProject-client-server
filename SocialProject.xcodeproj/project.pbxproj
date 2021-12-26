@@ -28,6 +28,7 @@
 		595CFA0925C71B3500453C87 /* LoginFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595CFA0825C71B3500453C87 /* LoginFormViewController.swift */; };
 		595EB3292753EAFB007500F0 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595EB3282753EAFB007500F0 /* ProfileImage.swift */; };
 		595EB32E2753F39E007500F0 /* GroupsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595EB32D2753F39E007500F0 /* GroupsCollectionViewController.swift */; };
+		596A67D7276A590C007D2F78 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596A67D6276A590C007D2F78 /* Feed.swift */; };
 		596BF779271CB03E009224D2 /* CustomAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 596BF778271CB03E009224D2 /* CustomAvatarView.swift */; };
 		597B41C7274AB0400006E5DB /* WebLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597B41C6274AB0400006E5DB /* WebLoginViewController.swift */; };
 		597B41D4274AC9D50006E5DB /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597B41D3274AC9D50006E5DB /* NetworkManager.swift */; };
@@ -94,6 +95,7 @@
 		595CFA0825C71B3500453C87 /* LoginFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginFormViewController.swift; sourceTree = "<group>"; };
 		595EB3282753EAFB007500F0 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		595EB32D2753F39E007500F0 /* GroupsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsCollectionViewController.swift; sourceTree = "<group>"; };
+		596A67D6276A590C007D2F78 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		596BF778271CB03E009224D2 /* CustomAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAvatarView.swift; sourceTree = "<group>"; };
 		597B41C6274AB0400006E5DB /* WebLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebLoginViewController.swift; sourceTree = "<group>"; };
 		597B41D3274AC9D50006E5DB /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				595AB286274EAD4D00780917 /* Photo.swift */,
 				595EB3282753EAFB007500F0 /* ProfileImage.swift */,
 				59E54AAC276689CE001F0125 /* CarentUser.swift */,
+				596A67D6276A590C007D2F78 /* Feed.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -487,6 +490,7 @@
 				59CCAA65272ECE2000B1394A /* NewsTableViewController.swift in Sources */,
 				595EB32E2753F39E007500F0 /* GroupsCollectionViewController.swift in Sources */,
 				596BF779271CB03E009224D2 /* CustomAvatarView.swift in Sources */,
+				596A67D7276A590C007D2F78 /* Feed.swift in Sources */,
 				591819F62673B96E0051079B /* CustomNavigationController.swift in Sources */,
 				59CCAA582729DBBB00B1394A /* PostCollectionViewCell.swift in Sources */,
 				592F7AF62671E30A0003ED1D /* Group.swift in Sources */,

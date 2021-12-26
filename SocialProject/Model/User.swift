@@ -45,11 +45,13 @@ class User: Object, CellModel {
         }
     }
     
-    override init() {
-        super.init()
+    override class func primaryKey() -> String? {
+        return "id"
     }
     
-    init(id: Int, firstName: String, lastName: String, sex: Sex, hasPhoto: Bool, photo: Photo) {
+    convenience init(id: Int, firstName: String, lastName: String, sex: Sex, hasPhoto: Bool, photo: Photo) {
+        self.init()
+        
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
@@ -62,7 +64,7 @@ class User: Object, CellModel {
 class FriendList: Decodable {
     var amount: Int = 0
     var friends: [User] = []
-    // var groups: [Group] = []
+    
     enum ResponseCodingKeys: String, CodingKey {
         case response
     }
@@ -88,6 +90,7 @@ class FriendList: Decodable {
         case id
         case title
     }
+    
     required init(from decoder: Decoder) throws {
         let response = try decoder.container(keyedBy: ResponseCodingKeys.self)
         let values = try response.nestedContainer(keyedBy: ItemsCodingKeys.self, forKey: .response)
@@ -117,8 +120,9 @@ class FriendList: Decodable {
             let photo = Photo(photo_50: photo50, photo_100: photo100, photo_200: photo200)
 //            let city = City(id: cityID, title: cityTitle)
             let sex = Sex(rawValue: sexInt) ?? .empty
-//
+//            let friend = User(id: id, firstName: firstName, lastName: lastName, sex: sex, city: city, hasPhoto: hasPhotoBool, photo: photo)
             let friend = User(id: id, firstName: firstName, lastName: lastName, sex: sex, hasPhoto: hasPhotoBool, photo: photo)
+            
             self.friends.append(friend)
         }
     }
