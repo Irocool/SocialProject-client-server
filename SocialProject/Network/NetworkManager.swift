@@ -183,29 +183,30 @@ class NetworkManager {
     }
     
     @discardableResult
-    func loadFeed(count: Int, completion: @escaping (Feed) -> Void) -> Request? {
+    func loadFeed(count: Int, from: String, completion: @escaping (Feed) -> Void) -> Request? {
         guard let token = UserSession.instance.token else { return nil }
     
         let path = Paths.getFeed.rawValue
     
         let parameters: Parameters = [
+            "start_from": from,
             "count": count,
             "filters": "post,photo",
             "access_token": token,
             "v": versionVKAPI
         ]
-    
+        
         let url = baseURL + path
-    
+        
         return Session.custom.request(url, parameters: parameters).responseData { (response) in
             guard let data = response.value,
                   let feed = try? JSONDecoder().decode(Feed.self, from: data)
             else {
                 print("Failed to parse feed JSON!")
-            return
+                return
             }
-        
-        completion(feed)
+            
+            completion(feed)
         }
     }
 }

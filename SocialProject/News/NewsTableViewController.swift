@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class NewsTableViewController: UITableViewController {
         
@@ -13,39 +14,72 @@ class NewsTableViewController: UITableViewController {
     
     var newsArray: [News] = []
     var groups: [Group] = []
+    var nextFrom = ""
+    var isLoading = false
+    var request: Request?
+    
+    private var testCell = NewsTableViewCell()
+    private var expandedCells: [IndexPath: NewsTableViewCell] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellReuseIdentifier: "NewsTableViewCell")
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
         tableView.rowHeight = UITableView.automaticDimension
         tableView.rowHeight = 600
         tableView.backgroundColor = Colors.palePurplePantone
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "To Top", style: .plain, target: self, action: #selector(topButtonTapped))
+        setupRefreshControl()
+        loadNews{}
+    }
+        
+    @objc func topButtonTapped() {
+        tableView.setContentOffset(.zero, animated: true)
+    }
+    private func setupRefreshControl() {
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.tintColor = Colors.brand
+        tableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
     }
     
-        override func viewDidAppear(_ animated: Bool) {
-            super.viewDidAppear(animated)
+    @objc func handleRefreshControl() { loadNews() { [weak self] in
+            guard let self = self else { return }
             
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "To Top", style: .plain, target: self, action: #selector(topButtonTapped))
-            
-            loadNews()
-        }
-        
-        @objc func topButtonTapped() {
-            tableView.setContentOffset(.zero, animated: true)
-        }
-        
-        private func loadNews() {
-            NetworkManager.shared.loadFeed(count: 200) { [weak self] (feedResponse) in
-                DispatchQueue.main.async {
-                    guard let self = self else { return }
-                    self.newsArray = feedResponse.newsArray
-                    self.groups = feedResponse.groups
-                    self.tableView.reloadData()
-                }
+            // Dismiss the refresh control.
+            DispatchQueue.main.async {
+                self.tableView.refreshControl?.endRefreshing()
             }
         }
 
+    }
+    
+    private func loadNews(completion: @escaping () -> Void) {
+        self.request = NetworkManager.shared.loadFeed(count: 25, from: "") { [weak self] (feedResponse) in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.newsArray = feedResponse.newsArray
+                self.groups = feedResponse.groups
+                self.nextFrom = feedResponse.nextFrom
+                self.tableView.reloadData()
+                completion()
+            }
+        }
+    }
+
+    private func loadNextNews() {
+        print(#function)
+        self.request = NetworkManager.shared.loadFeed(count: 15, from: nextFrom) { [weak self] (feedResponse) in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.newsArray += feedResponse.newsArray
+                self.groups += feedResponse.groups
+                self.nextFrom = feedResponse.nextFrom
+                self.isLoading = false
+                self.tableView.reloadData()
+            }
+        }
+    }
 
     // MARK: - Table view data source
 
@@ -60,6 +94,12 @@ class NewsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! NewsTableViewCell
 
+        configureCell(cell: cell, indexPath: indexPath)
+        
+        return cell
+    }
+
+    private func configureCell(cell: NewsTableViewCell, indexPath: IndexPath) {
         var groupToSet = Group()
         let newsPost = newsArray[indexPath.item]
         
@@ -69,12 +109,9 @@ class NewsTableViewController: UITableViewController {
                 break;
             }
         }
-        //if newsPost.text == nil {cell.viewPostTextLabel.isHidden = true}
-        //if cell.postImageView == nil {cell.postImageView.isHidden = true}
         
         cell.setValues(item: newsPost, group: groupToSet)
-
-        return cell
+        cell.mainScreen = self
     }
 
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
