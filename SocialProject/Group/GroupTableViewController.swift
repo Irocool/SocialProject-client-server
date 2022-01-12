@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import PromiseKit
 
 class GroupTableViewController: UITableViewController {
     
@@ -17,8 +18,6 @@ class GroupTableViewController: UITableViewController {
     var groupsData: Results<Group>!
     private var groupToken: NotificationToken?
     
-
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -28,7 +27,7 @@ class GroupTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //setupLoadingView()
+        setupLoadingView()
 
         tableView.register(UINib(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
         
@@ -36,6 +35,22 @@ class GroupTableViewController: UITableViewController {
         view.backgroundColor = Colors.palePurplePantone
         
         getGroupData()
+        
+    }
+    func loadGroupDataNetworkPromise() {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        if let promise = NetworkManager.shared.loadGroupsListPromise(count: 0, offset: 0) {
+            promise.get { (groups) in
+                DatabaseManager.shared.deleteGroupData() // Removing all group data before loading new data from network
+                DatabaseManager.shared.saveGroupData(groups: groups) // Saving data from network to Realm
+            }
+            .catch { (error) in
+                print(error.localizedDescription)
+            }
+            .finally {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            }
+        }
         
     }
     private func setupLoadingView() {

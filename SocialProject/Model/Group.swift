@@ -89,3 +89,6 @@ class GroupList: Decodable {
         }
     }
 }
+enum GroupsError: Error {
+    case parseError(message: String)
+}

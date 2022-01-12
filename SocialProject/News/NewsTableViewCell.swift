@@ -365,8 +365,8 @@ class NewsTableViewCell: UITableViewCell {
         let likesCount = String(self.post?.likesCount ?? 0)
         self.likeButton.setTitle(likesCount, for: .normal)
     }
-    
-    func setValues(item: News, group: Group) {
+    //Header новости
+    func setHeaderSectionValues(item: News, group: Group) {
         self.post = item
         
         isExpanded = false
@@ -383,15 +383,33 @@ class NewsTableViewCell: UITableViewCell {
         }
         nameLabel.text = group.name
         postDateLabel.text = getStringFromDate(item.date)
-        
-        // Наполнение новости
+    }
+    //текст новости
+    func setTextSectionValues(item: News, group: Group) {
+        self.post = item
+            
+        isExpanded = false
+        isExpandable = false
+       
         setupTextLabel(item.text)
-        
+    }
+    // Фото новости
+    func setPhotoSectionValues(item: News, group: Group) {
+        self.post = item
+                
+        isExpanded = false
+        isExpandable = false
         if let photo = item.photo {
             setupPostImageView(photo)
         }
-        
-        // Footer новости
+    }
+    //Footer новости
+    func setFooterSectionValues(item: News, group: Group) {
+        self.post = item
+            
+        isExpanded = false
+        isExpandable = false
+      
         setupLikeButton(String(item.likesCount))
         setLikeButtonState(isUserLikes: item.isUserLikes)
         setupCommentButton(String(item.repostCount))
@@ -465,7 +483,7 @@ class NewsTableViewCell: UITableViewCell {
         if let photo = item.photo {
             layoutPostImageView(photo: photo)
         }
-        layoutMoreButton()
+       // layoutMoreButton()
         layoutLikeButton(numberOfLikes: String(item.likesCount))
         layoutCommentButton(numberOfComments: String(item.commentCount))
         layoutRepostButton(numberOfReposts: String(item.repostCount))

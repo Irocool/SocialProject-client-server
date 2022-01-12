@@ -11,5 +11,5 @@ target 'SocialProject' do
   pod 'Kingfisher', '~> 5.15'
   pod 'Firebase/Database'
   pod 'Firebase/Firestore'
-
+  pod 'PromiseKit'
 end

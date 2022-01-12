@@ -10,23 +10,26 @@ import Alamofire
 
 class NewsTableViewController: UITableViewController {
         
-    private let reuseIdentifier = "NewsTableViewCell"
+    private let reuseIdentifier1 = "NewsHeaderSectionCell"
+    private let reuseIdentifire2 = "NewsTextSectionCell"
     
+    //var sections: [Int] = [1, 2, 3, 4]
     var newsArray: [News] = []
     var groups: [Group] = []
     var nextFrom = ""
     var isLoading = false
     var request: Request?
     
-    private var testCell = NewsTableViewCell()
-    private var expandedCells: [IndexPath: NewsTableViewCell] = [:]
+    //private var testCell = NewsTableViewCell()
+   // private var expandedCells: [IndexPath: NewsTableViewCell] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: reuseIdentifier)
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.rowHeight = 600
+        tableView.register(NewsHeaderSectionCell.self, forCellReuseIdentifier: reuseIdentifier1)
+        tableView.register(NewsTextSectionCell.self, forCellReuseIdentifier: reuseIdentifire2)
+        //tableView.rowHeight = UITableView.automaticDimension
+        //tableView.rowHeight = 600
         tableView.backgroundColor = Colors.palePurplePantone
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "To Top", style: .plain, target: self, action: #selector(topButtonTapped))
@@ -84,22 +87,17 @@ class NewsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return newsArray.count
+        
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsArray.count
+        return 2
+        
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as! NewsTableViewCell
-
-        configureCell(cell: cell, indexPath: indexPath)
         
-        return cell
-    }
-
-    private func configureCell(cell: NewsTableViewCell, indexPath: IndexPath) {
         var groupToSet = Group()
         let newsPost = newsArray[indexPath.item]
         
@@ -109,21 +107,50 @@ class NewsTableViewController: UITableViewController {
                 break;
             }
         }
-        
-        cell.setValues(item: newsPost, group: groupToSet)
-        cell.mainScreen = self
-    }
+            switch indexPath.row {
+            case 0:
+                let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier1, for: indexPath) as! NewsHeaderSectionCell
+            
+            
+                cell.setHeaderSectionValues(item: newsPost, group: groupToSet)
+               // cell.mainScreen = self
+            return cell
+                
+            case 1:
+                let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifire2, for: indexPath) as! NewsTextSectionCell
+                let text = newsArray[indexPath.item].text
+                cell.configure(text)
+                return cell
+            
+            default:
+                return UITableViewCell()
+            }
 
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        // Before animation
-        cell.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-        cell.alpha = 0.0
-        
-        // Animation
-        UIView.animate(withDuration: 1.0) {
-            cell.transform = .identity
-            cell.alpha = 1.0
-        }
-    }
+//    private func configureCell (cell: NewsTableViewCell, indexPath: IndexPath) {
+//        var groupToSet = Group()
+//        let newsPost = newsArray[indexPath.item]
+//
+//        for group in groups {
+//            if group.id == newsPost.sourceID || -group.id == newsPost.sourceID {
+//                groupToSet = group
+//                break;
+//            }
+//        }
+//        cell.setValues(item: newsPost, group: groupToSet)
+//        cell.mainScreen = self
+//    }
+
+//        func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        // Before animation
+//        cell.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+//        cell.alpha = 0.0
+//        
+//        // Animation
+//        UIView.animate(withDuration: 1.0) {
+//            cell.transform = .identity
+//            cell.alpha = 1.0
+//        }
+//    }
 }
 
+}

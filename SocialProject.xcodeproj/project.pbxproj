@@ -18,6 +18,8 @@
 		59479BEF27162A7C005F3836 /* FriendsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59479BEE27162A7C005F3836 /* FriendsCollectionViewController.swift */; };
 		59479BF427162D0B005F3836 /* GroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59479BF327162D0B005F3836 /* GroupTableViewController.swift */; };
 		59479BF927162D73005F3836 /* AddGroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59479BF827162D73005F3836 /* AddGroupTableViewController.swift */; };
+		595286D02789BDC700F37DAE /* NewsHeaderSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595286CF2789BDC700F37DAE /* NewsHeaderSectionCell.swift */; };
+		595286D82789C28400F37DAE /* NewsTextSectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595286D72789C28400F37DAE /* NewsTextSectionCell.swift */; };
 		59598550273852E400577B1B /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5959854F273852E400577B1B /* GradientView.swift */; };
 		595AB287274EAD4D00780917 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595AB286274EAD4D00780917 /* Photo.swift */; };
 		595CF9C125C7153700453C87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595CF9C025C7153700453C87 /* AppDelegate.swift */; };
@@ -81,6 +83,8 @@
 		59479BEE27162A7C005F3836 /* FriendsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsCollectionViewController.swift; sourceTree = "<group>"; };
 		59479BF327162D0B005F3836 /* GroupTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupTableViewController.swift; sourceTree = "<group>"; };
 		59479BF827162D73005F3836 /* AddGroupTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGroupTableViewController.swift; sourceTree = "<group>"; };
+		595286CF2789BDC700F37DAE /* NewsHeaderSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsHeaderSectionCell.swift; sourceTree = "<group>"; };
+		595286D72789C28400F37DAE /* NewsTextSectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTextSectionCell.swift; sourceTree = "<group>"; };
 		5959854F273852E400577B1B /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		595AB286274EAD4D00780917 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		595CF9BD25C7153700453C87 /* SocialProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocialProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -283,6 +287,8 @@
 				59CCAA63272ECE2000B1394A /* NewsTableViewController.swift */,
 				59CCAA6D272EDFDD00B1394A /* NewsTableViewCell.swift */,
 				59CCAA6E272EDFDD00B1394A /* NewsTableViewCell.xib */,
+				595286CF2789BDC700F37DAE /* NewsHeaderSectionCell.swift */,
+				595286D72789C28400F37DAE /* NewsTextSectionCell.swift */,
 			);
 			path = News;
 			sourceTree = "<group>";
@@ -472,6 +478,7 @@
 				59E54AAD276689CE001F0125 /* CarentUser.swift in Sources */,
 				592F7AEE2671E28F0003ED1D /* User.swift in Sources */,
 				59479BF927162D73005F3836 /* AddGroupTableViewController.swift in Sources */,
+				595286D82789C28400F37DAE /* NewsTextSectionCell.swift in Sources */,
 				597B41DC274ACA820006E5DB /* AlamofireSession.swift in Sources */,
 				599140A9273416D00032BAD7 /* PopAnimation.swift in Sources */,
 				59CCAA6F272EDFDD00B1394A /* NewsTableViewCell.swift in Sources */,
@@ -498,6 +505,7 @@
 				59479BF427162D0B005F3836 /* GroupTableViewController.swift in Sources */,
 				595CF9C325C7153700453C87 /* SceneDelegate.swift in Sources */,
 				59CCAA5E2729EE4600B1394A /* PhotoViewerViewController.swift in Sources */,
+				595286D02789BDC700F37DAE /* NewsHeaderSectionCell.swift in Sources */,
 				595AB287274EAD4D00780917 /* Photo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
