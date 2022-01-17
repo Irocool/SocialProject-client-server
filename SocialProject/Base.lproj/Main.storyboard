@@ -393,7 +393,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="searchView" destination="B7j-i8-Weg" id="wME-ge-zdG"/>
+                        <outlet property="searchBar" destination="B7j-i8-Weg" id="RyU-GC-9sx"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IJt-bG-zbE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

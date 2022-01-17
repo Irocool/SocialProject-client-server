@@ -40,7 +40,7 @@ class AddGroupTableViewController: UITableViewController, UISearchBarDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath) as! CustomTableViewCell
         
         cell.setValues(item: groups[indexPath.row])
-
+        
         return cell
     }
     

@@ -38,7 +38,7 @@ class GroupTableViewController: UITableViewController {
         
     }
     func loadGroupDataNetworkPromise() {
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        //UIApplication.shared.isNetworkActivityIndicatorVisible = true
         if let promise = NetworkManager.shared.loadGroupsListPromise(count: 0, offset: 0) {
             promise.get { (groups) in
                 DatabaseManager.shared.deleteGroupData() // Removing all group data before loading new data from network
@@ -48,7 +48,7 @@ class GroupTableViewController: UITableViewController {
                 print(error.localizedDescription)
             }
             .finally {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                //UIApplication.shared.isNetworkActivityIndicatorVisible = false
             }
         }
         
@@ -109,6 +109,7 @@ class GroupTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath) as! CustomTableViewCell
         
         cell.setValues(item: groupsData[indexPath.row])
+        
         
         return cell
     }

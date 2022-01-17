@@ -8,8 +8,9 @@ import RealmSwift
 
 class DatabaseManager {
     static var shared = DatabaseManager()
-    let realm = try! Realm()
-
+    
+    private var realm = try! Realm()
+    
     private init() {  }
     
     // MARK: - Saving data
@@ -20,9 +21,9 @@ class DatabaseManager {
         }
     }
     
-    func saveUserData(groups: [User]) {
+    func saveUserData(users: [User]) {
         try? realm.write {
-            realm.add(groups)
+            realm.add(users, update: .modified)
         }
     }
     
@@ -35,17 +36,17 @@ class DatabaseManager {
     // MARK: - Loading data
     
     func loadGroupData() -> Results<Group> {
-        return realm.objects(Group.self)
+        return realm.objects(Group.self).sorted(byKeyPath: "orderNumber")
     }
     
     func loadUserData() -> Results<User> {
-        return realm.objects(User.self)
+        return realm.objects(User.self).sorted(byKeyPath: "order")
     }
     
     func loadImageDataBy(ownerID: Int) -> Results<Image> {
         return realm.objects(Image.self).filter("ownerID == %@", ownerID).sorted(byKeyPath: "date", ascending: false)
     }
-
+    
     // MARK: - Remove all data
     
     func deleteGroupData() {
@@ -69,4 +70,3 @@ class DatabaseManager {
         }
     }
 }
-

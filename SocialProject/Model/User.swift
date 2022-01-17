@@ -36,7 +36,9 @@ class User: Object, CellModel {
 //    var city: City?
     @objc dynamic var hasPhoto: Bool = false
     @objc dynamic var photo: Photo? = nil
-    
+    @objc dynamic var isOnline: Bool = false
+    @objc dynamic var lastSeen: Int = -1
+
     var sex: Sex = .empty
     
     var name: String {
@@ -44,7 +46,8 @@ class User: Object, CellModel {
             return "\(firstName) \(lastName)"
         }
     }
-    
+    @objc dynamic var order: Int = -1
+
     override class func primaryKey() -> String? {
         return "id"
     }
@@ -58,6 +61,9 @@ class User: Object, CellModel {
         self.sex = sex
         self.hasPhoto = hasPhoto
         self.photo = photo
+        self.isOnline = isOnline
+        self.lastSeen = lastSeen
+        
     }
 }
 
