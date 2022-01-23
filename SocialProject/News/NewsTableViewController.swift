@@ -9,26 +9,19 @@ import UIKit
 import Alamofire
 
 class NewsTableViewController: UITableViewController {
-        
-    private let reuseIdentifier1 = "NewsHeaderSectionCell"
-    private let reuseIdentifire2 = "NewsTextSectionCell"
     
-    //var sections: [Int] = [1, 2, 3, 4]
+    var request: Request?
+
     var newsArray: [News] = []
     var groups: [Group] = []
-    var nextFrom = ""
-    var isLoading = false
-    var request: Request?
-    
-    //private var testCell = NewsTableViewCell()
-   // private var expandedCells: [IndexPath: NewsTableViewCell] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.register(NewsHeaderSectionCell.self, forCellReuseIdentifier: reuseIdentifier1)
-        tableView.register(NewsTextSectionCell.self, forCellReuseIdentifier: reuseIdentifire2)
-        //tableView.rowHeight = UITableView.automaticDimension
+        tableView.register(NewsHeaderSection.self, forCellReuseIdentifier: NewsHeaderSection.identifier)
+        tableView.register(NewsTextSectionCell.self, forCellReuseIdentifier: NewsTextSectionCell.identifier)
+        tableView.register(NewsFooterSection.self, forCellReuseIdentifier: NewsFooterSection.identifier)
+        tableView.register(NewsImageSectionCell.self, forCellReuseIdentifier: NewsImageSectionCell.identifier)        //tableView.rowHeight = UITableView.automaticDimension
         //tableView.rowHeight = 600
         tableView.backgroundColor = Colors.palePurplePantone
 
@@ -63,26 +56,12 @@ class NewsTableViewController: UITableViewController {
                 guard let self = self else { return }
                 self.newsArray = feedResponse.newsArray
                 self.groups = feedResponse.groups
-                self.nextFrom = feedResponse.nextFrom
                 self.tableView.reloadData()
                 completion()
             }
         }
     }
 
-    private func loadNextNews() {
-        print(#function)
-        self.request = NetworkManager.shared.loadFeed(count: 15, from: nextFrom) { [weak self] (feedResponse) in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                self.newsArray += feedResponse.newsArray
-                self.groups += feedResponse.groups
-                self.nextFrom = feedResponse.nextFrom
-                self.isLoading = false
-                self.tableView.reloadData()
-            }
-        }
-    }
 
     // MARK: - Table view data source
 
@@ -98,48 +77,51 @@ class NewsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        var groupToSet = Group()
-        let newsPost = newsArray[indexPath.item]
-        
-        for group in groups {
-            if group.id == newsPost.sourceID || -group.id == newsPost.sourceID {
-                groupToSet = group
-                break;
-            }
-        }
+
             switch indexPath.row {
             case 0:
-                let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier1, for: indexPath) as! NewsHeaderSectionCell
-            
-            
-                cell.setHeaderSectionValues(item: newsPost, group: groupToSet)
-               // cell.mainScreen = self
-            return cell
+                let cell = tableView.dequeueReusableCell(withIdentifier: NewsImageSectionCell.identifier, for: indexPath) as! NewsImageSectionCell
+                guard let image = newsArray[indexPath.section].photo else { return UITableViewCell() }
+                
+                cell.setPostImage(url: image.url)
+                return cell
                 
             case 1:
-                let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifire2, for: indexPath) as! NewsTextSectionCell
-                let text = newsArray[indexPath.item].text
+                let cell = tableView.dequeueReusableCell(withIdentifier: NewsTextSectionCell.identifier, for: indexPath) as! NewsTextSectionCell
+                let text = newsArray[indexPath.section].text
                 cell.configure(text)
                 return cell
             
             default:
                 return UITableViewCell()
             }
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: NewsHeaderSection.identifier) as? NewsHeaderSection
 
-//    private func configureCell (cell: NewsTableViewCell, indexPath: IndexPath) {
-//        var groupToSet = Group()
-//        let newsPost = newsArray[indexPath.item]
-//
-//        for group in groups {
-//            if group.id == newsPost.sourceID || -group.id == newsPost.sourceID {
-//                groupToSet = group
-//                break;
-//            }
-//        }
-//        cell.setValues(item: newsPost, group: groupToSet)
-//        cell.mainScreen = self
-//    }
+            headerView?.setHeaderSectionValues(item: newsArray[section], group: groups[section])
+           
 
+            return headerView
+            
+        }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+            return 50
+        }
+        
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+            
+            let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: NewsFooterSection.identifier) as! NewsFooterSection
+            footerView.setFooterSectionValues(item: newsArray[section], group: groups[section])
+            return footerView
+        }
+        
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+            return 50
+        }
+        
 //        func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 //        // Before animation
 //        cell.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
@@ -151,6 +133,6 @@ class NewsTableViewController: UITableViewController {
 //            cell.alpha = 1.0
 //        }
 //    }
-}
+
 
 }

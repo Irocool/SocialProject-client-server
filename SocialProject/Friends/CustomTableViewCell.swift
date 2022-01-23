@@ -114,7 +114,7 @@ class CustomTableViewCell: UITableViewCell {
         }
     }
     
-     func setValues(item: CellModel) {
+    private func setValues(item: CellModel) {
         if let photo = item.photo,
            let url = URL(string: photo.photo_100) {
             avatarView.setImage(url)

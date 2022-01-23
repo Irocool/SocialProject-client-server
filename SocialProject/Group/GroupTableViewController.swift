@@ -28,15 +28,19 @@ class GroupTableViewController: UITableViewController {
         super.viewDidLoad()
         
         setupLoadingView()
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "CustomTableViewCell")
 
-        tableView.register(UINib(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
-        
-        
         view.backgroundColor = Colors.palePurplePantone
         
         getGroupData()
         
     }
+    
+    private func setupLoadingView() {
+        view.addSubview(loadingView)
+        loadingView.isHidden = true
+    }
+    
     func loadGroupDataNetworkPromise() {
         //UIApplication.shared.isNetworkActivityIndicatorVisible = true
         if let promise = NetworkManager.shared.loadGroupsListPromise(count: 0, offset: 0) {
@@ -53,10 +57,7 @@ class GroupTableViewController: UITableViewController {
         }
         
     }
-    private func setupLoadingView() {
-        view.addSubview(loadingView)
-        loadingView.isHidden = true
-    }
+   
 
     func getGroupData() {
         self.groupsData = DatabaseManager.shared.loadGroupData()
@@ -77,8 +78,8 @@ class GroupTableViewController: UITableViewController {
                 print("Error in \(#function). Message: \(error.localizedDescription)")
             }
         })
-        
-        loadGroupList() // Load new data anyways
+        loadGroupDataNetworkPromise()
+//        loadGroupList() // Load new data anyways
     }
     
     private func loadGroupList() {
@@ -108,42 +109,42 @@ class GroupTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath) as! CustomTableViewCell
         
-        cell.setValues(item: groupsData[indexPath.row])
+        cell.setGroupCell(group: groupsData[indexPath.row])
         
         
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "GroupsCollectionViewController") as! GroupsCollectionViewController
-//
-//        let group = groupsData[indexPath.row]
-//
-//        vc.title = group.name
-//        //vc.getImages(group: group)
-//
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-//
-//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            let group = groupsData[indexPath.row]
-//            let realm = try! Realm()
-//            try? realm.write {
-//                realm.delete(group)
-//            }
-//        }
-//    }
-//
-//    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        // Before animation
-//        cell.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-//        cell.alpha = 0.0
-//
-//        // Animation
-//        UIView.animate(withDuration: 1.0) {
-//            cell.transform = .identity
-//            cell.alpha = 1.0
-//        }
-//    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(identifier: "GroupsCollectionViewController") as! GroupsCollectionViewController
+
+        let group = groupsData[indexPath.row]
+
+        vc.title = group.name
+        vc.getImages(group: group)
+
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let group = groupsData[indexPath.row]
+            let realm = try! Realm()
+            try? realm.write {
+                realm.delete(group)
+            }
+        }
+    }
+
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // Before animation
+        cell.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+        cell.alpha = 0.0
+
+        // Animation
+        UIView.animate(withDuration: 1.0) {
+            cell.transform = .identity
+            cell.alpha = 1.0
+        }
+    }
 }

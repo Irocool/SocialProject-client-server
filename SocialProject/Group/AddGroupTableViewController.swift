@@ -17,7 +17,8 @@ class AddGroupTableViewController: UITableViewController, UISearchBarDelegate {
 
         searchBar.delegate = self
         
-        tableView.register(UINib(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
+        tableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "CustomTableViewCell")
+        //        tableView.register(UINib(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
         
         view.backgroundColor = Colors.palePurplePantone
     }
@@ -39,7 +40,7 @@ class AddGroupTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell", for: indexPath) as! CustomTableViewCell
         
-        cell.setValues(item: groups[indexPath.row])
+        cell.setGroupCell(group: groups[indexPath.row])
         
         return cell
     }
@@ -52,17 +53,6 @@ class AddGroupTableViewController: UITableViewController, UISearchBarDelegate {
         vc.getImages(group: group)
         
         self.navigationController?.pushViewController(vc, animated: true)
-//        NetworkManager.shared.getPhotos(ownerID: "-\(group.id)", count: 30, offset: 0, type: .wall) { [weak self] imageList in
-//            DispatchQueue.main.async {
-//                guard let self = self,
-//                      let imageList = imageList else { return }
-//
-//                vc.posts = imageList.images
-//                vc.title = group.name
-//
-//                self.navigationController?.pushViewController(vc, animated: true)
-//            }
-//        }
     }
     
     // MARK: - SearchBar setup

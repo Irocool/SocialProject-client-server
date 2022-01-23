@@ -7,13 +7,15 @@
 
 import UIKit
 
-class NewsHeaderSectionCell: UITableViewCell {
+class NewsHeaderSection: UITableViewHeaderFooterView {
     
+    static let identifier: String = "NewsHeaderSection"
+
     var avatarImageView: UIImageView = UIImageView()
     var nameLabel: UILabel = UILabel()
     var postDateLabel: UILabel = UILabel()
 
-    var mainScreen: NewsTableViewController?
+    //var mainScreen: NewsTableViewController?
     
     private var screenBounds = UIScreen.main.bounds
     

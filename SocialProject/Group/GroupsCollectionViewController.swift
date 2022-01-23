@@ -11,8 +11,9 @@ import FirebaseFirestore
 
 class GroupsCollectionViewController: UICollectionViewController {
     
-    private let reuseIdentifier = "PostCollectionViewCell"
-    
+    //private let reuseIdentifier = "PostCollectionViewCell"
+    let reuseIdentifierCell = "GroupImageCollectionViewCell"
+    let reuseIdentifierHeader = "HeaderGroupSectionCollectionReusableView"
     var groupData: Group!
     var posts: Results<Image>!
     var token: NotificationToken?
@@ -20,8 +21,10 @@ class GroupsCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.register(UINib(nibName: reuseIdentifier, bundle: nil), forCellWithReuseIdentifier: reuseIdentifier)
-
+        collectionView.register(UINib(nibName: reuseIdentifierCell, bundle: nil), forCellWithReuseIdentifier: reuseIdentifierCell)
+   
+        collectionView.register(UINib(nibName: reuseIdentifierHeader, bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: reuseIdentifierHeader)
+        collectionView.collectionViewLayout = setupCollectionViewLayout()
         view.backgroundColor = Colors.palePurplePantone
         
         setupAddButton()
@@ -97,7 +100,7 @@ class GroupsCollectionViewController: UICollectionViewController {
                 
                 network(imageList)
             }
-        } //failure: {  }
+        }
     }
     
     func getImages(group: Group) {
@@ -131,17 +134,40 @@ class GroupsCollectionViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
+//    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        return 1
+//
+//    }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return posts.count
     }
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if let sectionHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: reuseIdentifierHeader, for: indexPath) as? HeaderGroupSectionCollectionReusableView {
+            sectionHeader.contentView.backgroundColor = Colors.darkPalePurplePantone
+            sectionHeader.profileImageView.roundView()
+            sectionHeader.profileImageView.clipsToBounds = true
+            sectionHeader.profileImageView.kf.setImage(with: URL(string: groupData.photo?.photo_200 ?? ""))
+            
+            sectionHeader.nameLabel.font = .systemFont(ofSize: 16, weight: .semibold)
+            sectionHeader.nameLabel.textColor = Colors.text
+            sectionHeader.nameLabel.text = groupData.name
+            
+            return sectionHeader
+        }
+        return UICollectionReusableView()
+        
+    }
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize{
+        return CGSize(width: CGFloat(collectionView.frame.size.width), height: CGFloat(125))
 
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PostCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifierCell, for: indexPath) as! GroupImageCollectionViewCell
         
         cell.setValues(item: posts[indexPath.item])
     
@@ -157,6 +183,19 @@ class GroupsCollectionViewController: UICollectionViewController {
         vc.getPhotosData(photos: images, currentIndex: indexPath.item)
             
             self.navigationController?.pushViewController(vc, animated: true)
+        }
+}
+    extension GroupsCollectionViewController: UICollectionViewDelegateFlowLayout  {
+        func setupCollectionViewLayout() -> UICollectionViewFlowLayout {
+            let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+            let width = UIScreen.main.bounds.width / 3
+
+            layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            layout.itemSize = CGSize(width: width, height: width)
+            layout.minimumInteritemSpacing = 0
+            layout.minimumLineSpacing = 0
+
+            return layout
         }
     }
 
